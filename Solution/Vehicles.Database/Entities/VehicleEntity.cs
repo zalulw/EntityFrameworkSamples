@@ -1,17 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Vehicles.Database.Entities
 {
-    [Table("vehicle")]
+    [Table("vehicle")] //sqlben a tabla neve ez lesz
+    [Index(nameof(LicensePlate), IsUnique = true)]
     public class VehicleEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key] //primary key
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] //auto increment (noveli az id-t uj rekordnal)
         public uint Id { get; set; }
 
-        [Required]
-        [StringLength(7)]
+        [Required] //nem lehet null
+        [StringLength(7)] 
         public string LicensePlate { get; set; }
 
         [Required]
