@@ -33,5 +33,9 @@ namespace Vehicles.Database.Entities
 
         [Required]
         public uint Power { get; set; }
+
+        [ForeignKey("Color")] //osszekoti a 2 tablat
+        public uint ColorID { get; set; }   
+        public virtual ColorEntity Color { get; set; } //navigation property 
     }
 }

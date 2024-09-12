@@ -11,7 +11,7 @@ using Vehicles.Database;
 namespace Vehicles.Database.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240911064437_init")]
+    [Migration("20240912064047_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -23,6 +23,46 @@ namespace Vehicles.Database.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Vehicles.Database.Entities.ColorEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name", "Code")
+                        .IsUnique();
+
+                    b.ToTable("Color");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Code = "ffffff",
+                            Name = "White"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Code = "000000",
+                            Name = "Black"
+                        });
+                });
 
             modelBuilder.Entity("Vehicles.Database.Entities.VehicleEntity", b =>
                 {
@@ -36,6 +76,9 @@ namespace Vehicles.Database.Migrations
                         .IsRequired()
                         .HasMaxLength(17)
                         .HasColumnType("nvarchar(17)");
+
+                    b.Property<long>("ColorID")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("EngineNumber")
                         .IsRequired()
@@ -58,10 +101,28 @@ namespace Vehicles.Database.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ColorID");
+
                     b.HasIndex("LicensePlate")
                         .IsUnique();
 
                     b.ToTable("vehicle");
+                });
+
+            modelBuilder.Entity("Vehicles.Database.Entities.VehicleEntity", b =>
+                {
+                    b.HasOne("Vehicles.Database.Entities.ColorEntity", "Color")
+                        .WithMany("Vehicles")
+                        .HasForeignKey("ColorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Color");
+                });
+
+            modelBuilder.Entity("Vehicles.Database.Entities.ColorEntity", b =>
+                {
+                    b.Navigation("Vehicles");
                 });
 #pragma warning restore 612, 618
         }

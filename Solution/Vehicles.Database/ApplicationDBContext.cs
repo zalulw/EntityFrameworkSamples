@@ -20,13 +20,27 @@ namespace Vehicles.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+
 
             /* UNIQUE constraint beallitas
              * builder.Entity<VehicleEntity>()
              *        .HasIndex(x => x.LicensePlate)
              *        .IsUnique();
              */
+            modelBuilder.Entity<ColorEntity>().HasData(
+                new ColorEntity
+                {
+                    Id = 1,
+                    Name = "White",
+                    Code = "ffffff"
+                });
+            modelBuilder.Entity<ColorEntity>().HasData(
+                new ColorEntity
+                {
+                    Id = 2,
+                    Name = "Black",
+                    Code = "000000"
+                });
         }
     }
 }
